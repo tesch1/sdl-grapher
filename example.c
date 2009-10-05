@@ -65,7 +65,7 @@ int main()
 	
 	update_screen(&myGraph);
 	
-	setColor(&myGraph, 0xFF, 0xFF, 0xFF); 
+	set_color(&myGraph, 0xFF, 0xFF, 0xFF); 
 	
 	for ( count = -1000; count < 1000; count++ )
 	{
