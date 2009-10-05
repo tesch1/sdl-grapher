@@ -40,7 +40,7 @@ int main()
 									some "landmarks". These will be 5 pixels high (2*2 + 1). */
 
 	int count;
-	float x, y;
+	float x, y, temp;
 
 	set_color(&myGraph, 0, 0xFF, 0); /* Normal RGB fashion. Sets all points written to screen to be green */
     
@@ -78,6 +78,32 @@ int main()
 		
 		/* Prints out the exp(x) function */ 
 	}
+	
+	int pixels;
+	/* This will print out something really fancy :D 
+	 * Parmetrization example */
+	for ( count = 0; count < 2000000; count+=1 )
+	{
+		temp = (float)count;
+		set_color(&myGraph, rand()%255, rand()%255, rand()%255);
+
+		x = cos(temp/1000.0)*(exp(temp/1000000.0)-1.0)*tan(temp/500.0);
+		y = sin(temp/1000.0)*(exp(temp/1000000.0)-1.0)*tan(temp/200.0);
+
+		print_pixel(&myGraph, x, y);
+		
+		pixels++;
+		
+		if ( pixels % 5000 == 0)
+		{
+			update_screen(&myGraph);
+		}
+		
+	}
+	
+	
+	
+	
 	
 
 	idle(); 	/* Waits for the user to exit the program.
