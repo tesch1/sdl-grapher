@@ -42,7 +42,7 @@ int main()
 	int count;
 	float x, y;
 
-	setColor(&myGraph, 0, 0xFF, 0); /* Normal RGB fashion. Sets all points written to screen to be green */
+	set_color(&myGraph, 0, 0xFF, 0); /* Normal RGB fashion. Sets all points written to screen to be green */
     
 	for ( count = -100; count < 100; count++ )
 	{
