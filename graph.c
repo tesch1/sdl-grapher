@@ -18,25 +18,25 @@
 
 #include "sdlgraph.h"
 
-Uint32 * get_pixel_from_coordinates ( struct graph * Graph, float x, float y )
+Uint32 * get_pixel_from_coordinates ( Graph * myGraph, float x, float y )
 {
   	Uint32 * pixel;
   	
-  	int realWidth = get_width_from_coordinate(Graph, x); 
+	int realWidth = get_width_from_coordinate(myGraph, x); 
   	
   	
-  	int realHeight = get_height_from_coordinate(Graph, y);
+	int realHeight = get_height_from_coordinate(myGraph, y);
   	
   	
-  	if ( realHeight < 0 || realHeight >= Graph->height || realWidth < 0 || realWidth >= Graph->width )
+  	if ( realHeight < 0 || realHeight >= myGraph->height || realWidth < 0 || realWidth >= myGraph->width )
 		return NULL;
   	else
   	{
-		pixel = Graph->workingSurface->pixels;
+		pixel = myGraph->workingSurface->pixels;
 		
 		Uint32 width,height;
 		width = realWidth;
-		height = realHeight * Graph->width;
+		height = realHeight * myGraph->width;
 		pixel += width + height;
 		
 		return pixel;
@@ -44,47 +44,47 @@ Uint32 * get_pixel_from_coordinates ( struct graph * Graph, float x, float y )
 
 }
 
-Uint32 * get_pixel_from_window ( struct graph * Graph, int x, int y )
+Uint32 * get_pixel_from_window ( Graph * myGraph, int x, int y )
 {
   	Uint32 * pixel;
   	
-  	if ( y < 0 || y >= Graph->height || x < 0 || x >= Graph->height )
+  	if ( y < 0 || y >= myGraph->height || x < 0 || x >= myGraph->height )
 		return NULL;
   	else
   	{
 		Uint32 width,height;
 		width = x;
-		height = y * Graph->width;
-		pixel = (Uint32*)Graph->workingSurface->pixels + width + height;
+		height = y * myGraph->width;
+		pixel = (Uint32*)myGraph->workingSurface->pixels + width + height;
 		return pixel;
 	}
 
 }
 
-int get_width_from_coordinate ( struct graph * Graph, float x )
+int get_width_from_coordinate ( Graph * myGraph, float x )
 {
-  	int realWidth = (int)((float)Graph->width * (x - Graph->xMin) / (Graph->xMax - Graph->xMin));
+  	int realWidth = (int)((float)myGraph->width * (x - myGraph->xMin) / (myGraph->xMax - myGraph->xMin));
 	
 	return realWidth;	
 }
 
-int get_height_from_coordinate ( struct graph * Graph, float y )
+int get_height_from_coordinate ( Graph * myGraph, float y )
 {
-  	int realHeight = (int)((float)Graph->height - (float)Graph->height * (y - Graph->yMin) / (Graph->yMax - Graph->yMin));
+  	int realHeight = (int)((float)myGraph->height - (float)myGraph->height * (y - myGraph->yMin) / (myGraph->yMax - myGraph->yMin));
 	
 	return realHeight;	
 }
 
-void init_graph ( struct graph * Graph )
+void init_graph ( Graph * myGraph )
 {
 	
-    Graph->workingSurface = SDL_SetVideoMode(Graph->width, Graph->height, 32, SDL_SWSURFACE);
+    myGraph->workingSurface = SDL_SetVideoMode(myGraph->width, myGraph->height, 32, SDL_SWSURFACE);
     SDL_WM_SetCaption("GRAPH OUTPUT", NULL);
-    setColor(Graph, 0xFF, 0xFF, 0xFF);
+    set_color(myGraph, 0xFF, 0xFF, 0xFF);
       
 }
 
-void drawGrid ( struct graph * Graph, int thickness, int length )
+void draw_grid ( Graph * myGraph, int thickness, int length )
 {
 	
 	
@@ -94,18 +94,18 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 	length = abs(length);
 	
 	
-	height = get_height_from_coordinate(Graph, 0.0);
-	width = get_width_from_coordinate(Graph, 0.0);
+	height = get_height_from_coordinate(myGraph, 0.0);
+	width = get_width_from_coordinate(myGraph, 0.0);
 	
 	
 	int countX, countY;
 	
 	int pitchX, pitchY;
-	pitchX = get_width_from_coordinate(Graph, Graph->xScale) - width;
-	pitchY = get_height_from_coordinate(Graph, Graph->yScale) - height;
+	pitchX = get_width_from_coordinate(myGraph, myGraph->xScale) - width;
+	pitchY = get_height_from_coordinate(myGraph, myGraph->yScale) - height;
 	
 	
-	for ( countX = 0; countX < Graph->width; countX++ )
+	for ( countX = 0; countX < myGraph->width; countX++ )
 	{
 		
 		
@@ -114,7 +114,7 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 			
 			for ( countY = height - length; countY <= height + length; countY++ )
 			{
-				print_pixel_by_window(Graph, countX, countY);
+				print_pixel_by_window(myGraph, countX, countY);
 			}
 		}
 		
@@ -124,12 +124,12 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 			{
 				
 		    
-				print_pixel_by_window ( Graph, countX, countY );
+				print_pixel_by_window ( myGraph, countX, countY );
 			}
 		}
 	}
 	
-	for ( countY = 0; countY < Graph->height; countY++ )
+	for ( countY = 0; countY < myGraph->height; countY++ )
 	{
 		
 		if ( ((countY - height) % pitchY) == 0 )
@@ -139,7 +139,7 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 			{
 				
 			   
-				print_pixel_by_window ( Graph, countX, countY );
+				print_pixel_by_window ( myGraph, countX, countY );
 			}
 		}
 		
@@ -149,7 +149,7 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 			for ( countX = width - thickness; countX <= width + thickness; countX++ )
 			{
 			   
-				print_pixel_by_window ( Graph, countX, countY );
+				print_pixel_by_window ( myGraph, countX, countY );
 			}
 		}
 	}
@@ -157,7 +157,7 @@ void drawGrid ( struct graph * Graph, int thickness, int length )
 	 
 }
 
-void print_pixel_by_window ( struct graph * Graph, int x, int y )
+void print_pixel_by_window ( Graph * myGraph, int x, int y )
 {
 	Uint32 * pixel;
 	SDL_Event event;
@@ -170,15 +170,15 @@ void print_pixel_by_window ( struct graph * Graph, int x, int y )
 	}
 	
 	
-		pixel = get_pixel_from_window( Graph, x, y );
+		pixel = get_pixel_from_window( myGraph, x, y );
 	
 		if( pixel != NULL )
-			*pixel = Graph->color;
+			*pixel = myGraph->color;
 	
 	
 }
 	
-void print_pixel ( struct graph * Graph, float x, float y )
+void print_pixel ( Graph * myGraph, float x, float y )
 {
 	Uint32 * pixel;
 	SDL_Event event;
@@ -190,16 +190,16 @@ void print_pixel ( struct graph * Graph, float x, float y )
 		}
 	}
 	
-		pixel = get_pixel_from_coordinates( Graph, x, y );
+		pixel = get_pixel_from_coordinates( myGraph, x, y );
 	
 		if( pixel != NULL )
-			*pixel = Graph->color;
+			*pixel = myGraph->color;
 	
 }
 	
-void updateScreen(struct graph * Graph)
+void update_screen(Graph * myGraph)
 {
-	if (SDL_Flip(Graph->workingSurface) != 0) quit();
+	if (SDL_Flip(myGraph->workingSurface) != 0) quit();
 }
 
 void delay ( int time )
@@ -222,11 +222,11 @@ void delay ( int time )
 	}
 }
 
-void clear_graph(struct graph * Graph)
+void clear_graph(Graph * myGraph)
 {
 	Uint32 color;
-	color = SDL_MapRGB(Graph->workingSurface->format, 0x00, 0x00, 0x00);
-	SDL_FillRect(Graph->workingSurface, NULL, color);
+	color = SDL_MapRGB(myGraph->workingSurface->format, 0x00, 0x00, 0x00);
+	SDL_FillRect(myGraph->workingSurface, NULL, color);
 }
 
 void idle()
@@ -246,7 +246,7 @@ void idle()
 	}
 }
 
-void setColor(struct graph * window, int r, int g, int b)
+void set_color(Graph * window, int r, int g, int b)
 {
 	window->color = SDL_MapRGB(window->workingSurface->format, r, g, b);
 }

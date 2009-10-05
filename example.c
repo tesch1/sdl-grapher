@@ -20,7 +20,7 @@
 
 int main()
 {
-	struct graph myGraph;
+	Graph myGraph; /* Creates a new Graph */
 	
 	myGraph.xMin = -10.0;
 	myGraph.xMax = 10.0;
@@ -36,13 +36,13 @@ int main()
 	
 	init_graph(&myGraph); /* Initialized the graph, which gives you a normal SDL window */
 	
-	drawGrid(&myGraph, 0, 2); /* Draws a grid in origo. With thickness 0 (1 pixel), and after each xScale or yScale, draw
+	draw_grid(&myGraph, 0, 2); /* Draws a grid in origo. With thickness 0 (1 pixel), and after each xScale or yScale, draw
 									some "landmarks". These will be 5 pixels high (2*2 + 1). */
 
 	int count;
-        float x, y;
+	float x, y;
 
-    setColor(&myGraph, 0, 0xFF, 0); /* Normal RGB fashion. Sets all points written to screen to be green */
+	setColor(&myGraph, 0, 0xFF, 0); /* Normal RGB fashion. Sets all points written to screen to be green */
     
 	for ( count = -100; count < 100; count++ )
 	{
@@ -52,39 +52,38 @@ int main()
 		print_pixel(&myGraph, x, y); /* Prints a pixel to the screen on the graph coordinated (x,y).
 										Since this goes through a loop, you print out the entire graph. */
 		delay(10);					 /* Waits 10ms between each point printed. */
-		updateScreen(&myGraph);      /* Updates the screen. You now have a cool graph animation :D */
+		update_screen(&myGraph);      /* Updates the screen. You now have a cool graph animation :D */
 	}
 	
 	delay(2000); /* Waits two seconds ... */
 	
 	clear_graph(&myGraph); /* Clears out the graph */
 	
-	setColor(&myGraph, 0, 0, 0xFF); /* Changes color to be blue */
+	set_color(&myGraph, 0, 0, 0xFF); /* Changes color to be blue */
 	
-	drawGrid(&myGraph, 1, 250); /* Draws a full grid on the screen */
+	draw_grid(&myGraph, 1, 250); /* Draws a full grid on the screen */
 	
-	updateScreen(&myGraph);
+	update_screen(&myGraph);
 	
 	setColor(&myGraph, 0xFF, 0xFF, 0xFF); 
 	
 	for ( count = -1000; count < 1000; count++ )
 	{
 		x = count/100.0;
-		
 		y = exp(x);
+
 		delay(10);
 		print_pixel(&myGraph, x, y);
-		updateScreen(&myGraph);
+		update_screen(&myGraph);
 		
 		/* Prints out the exp(x) function */ 
 	}
 	
 
-	idle(); /* Waits for the user to exit the program. */
-	quit(); /* Quits ... baibai! */
-
-
-
+	idle(); 	/* Waits for the user to exit the program.
+  					To do: Accept aribitary event to continue program
+					instead of only exiting it.	*/
+	quit(); 	/* Quits ... baibai! (if idle() didn't do so already ...)*/
 	
 	return 0;
 }

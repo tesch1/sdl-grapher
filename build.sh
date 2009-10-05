@@ -6,10 +6,7 @@ function install()
 	cp -v sdlgraph.h /usr/include/
 }
 
-
-
-
-gcc -shared $CFLAGS -fPIC -Wl,-soname,libsdlgraph.so.0 graph.c -o libsdlgraph.so.0.1 -lSDL
+gcc -shared -fPIC -Wl,-soname,libsdlgraph.so.0 graph.c -o libsdlgraph.so.0.1 -lSDL `echo $CFLAGS`
 
 ln -s libsdlgraph.so.0.1 libsdlgraph.so
 ln -s libsdlgraph.so.0.1 libsdlgraph.so.0
@@ -17,5 +14,4 @@ ln -s libsdlgraph.so.0.1 libsdlgraph.so.0
 if [ "$1" = "install" ]; then
 	install
 fi
-
 
