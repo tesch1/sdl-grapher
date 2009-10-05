@@ -72,7 +72,7 @@ int main()
 		x = count/100.0;
 		y = exp(x);
 
-		delay(10);
+		delay(2);
 		print_pixel(&myGraph, x, y);
 		update_screen(&myGraph);
 		
