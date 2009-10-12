@@ -48,7 +48,7 @@ Uint32 * get_pixel_from_window ( Graph * myGraph, int x, int y )
 {
   	Uint32 * pixel;
   	
-  	if ( y < 0 || y >= myGraph->height || x < 0 || x >= myGraph->height )
+  	if ( y < 0 || y >= myGraph->height || x < 0 || x >= myGraph->width )
 		return NULL;
   	else
   	{
