@@ -246,6 +246,104 @@ void idle()
 	}
 }
 
+
+int write_BMP_header(FILE * file, int width, int height )
+{
+	int size;
+	if ( width % 4 == 0 )
+		size = 54 + 3*width*height;
+	else
+		size = 54 + 3*width*height + height*(4 - width%4);
+
+	int temp[0x36] = { 
+		0x42, 0x4D, // Magic number 
+		size%0x100, size/0x100, size/0x10000, size/0x1000000, // Size of BMP file
+	    0x00, 0x00, // NA
+		0x00, 0x00, // NA
+		0x36, 0x00, 0x00, 0x00, // The offset where the bitmap data can be found 
+		0x28, 0x00, 0x00, 0x00, // The number of bytes in the header (from this point)
+		width%0x100, width/0x100, width/0x10000, width/0x1000000, // Width of bitmap in pixels
+		height%0x100, height/0x100, height/0x10000, height/0x1000000, // The height of the bitmap in pixels
+		0x01, 0x00, // Number color planes being used
+		0x18, 0x00, // Number of bits/pixel
+		0x00, 0x00, 0x00, 0x00, // BI_RGB, No compression
+		0x10, 0x00, 0x00, 0x00, // Size of raw BMP data (after this header) 
+		0x13, 0x0B, 0x00, 0x00, // Horizontal reso (pixels/meter)
+		0x13, 0x0B, 0x00, 0x00, // Vertical reso (pixels/meter)
+		0x00, 0x00, 0x00, 0x00, // Number of colors in the palette
+		0x00, 0x00, 0x00, 0x00 // All colors are important
+		};
+
+		int count;
+		for ( count = 0; count < 0x36; count++ )
+		{
+			if (fputc(temp[count], file) == EOF )
+				return 0;
+		}
+		return 1;
+}
+
+int write_BMP_data(FILE * file, Graph * myGraph )
+{
+	int count, padding;
+	if ( myGraph->width % 4 == 0 )
+		padding = 0;
+	else
+		padding = 4 - (3*myGraph->width)%4;
+
+	Uint32 * pixel;
+	Uint8 * subpixel;
+
+	int widthCount, heightCount;
+
+	for ( heightCount = 0; heightCount < myGraph->height; heightCount++ )
+	{
+		for ( widthCount = 0; widthCount < myGraph->width; widthCount++ )
+		{
+			pixel = get_pixel_from_window(myGraph, widthCount, myGraph->height - heightCount - 1);
+			if ( pixel != NULL )
+			{
+			subpixel = (Uint8*)pixel;
+			if (fputc(subpixel[0], file) == EOF)
+				return 0;
+			if (fputc(subpixel[1], file) == EOF)
+				return 0;
+			if (fputc(subpixel[2], file) == EOF)
+				return 0;
+			}
+		}
+        for ( count = 0; count < padding; count++ )
+		{
+			if (fputc(0x00, file) == EOF)
+				return 0;
+		}
+	}
+	return 1;
+}
+
+
+void write_BMP(Graph * myGraph, char * name)
+{
+	FILE * file = fopen(name, "wb");
+	if ( file == NULL )
+	{
+		fprintf(stderr, "Error opening file\n");
+		exit(1);
+	}
+	if (!write_BMP_header(file, myGraph->width, myGraph->height))
+	{
+		fprintf(stderr, "Error writing BMP header\n");
+		exit(2);
+	}
+	if (!write_BMP_data(file, myGraph))
+	{
+		fprintf(stderr, "Error writing BMP data\n");
+		exit(3);
+	}
+	fclose(file);
+}
+
+
 void set_color(Graph * window, int r, int g, int b)
 {
 	window->color = SDL_MapRGB(window->workingSurface->format, r, g, b);
