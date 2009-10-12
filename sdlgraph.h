@@ -91,12 +91,13 @@ void idle();
 /* Will idle here until user quits program. */
 
 int write_BMP_header(FILE *, int, int );
+/* Is used by write_BMP() to write the BMP header. */
 
 int write_BMP_data(FILE *, Graph * );
+/* Writes BMP data byte for byte. */
 
 void write_BMP(Graph *, char *);
-
-
+/* Call this to dump the SDL_Surface to a bitmap picture (.bmp) */
 
 void set_color(Graph *, int, int, int);
 /* Sets the color in the struct given in normal 24-bit RGB format */
