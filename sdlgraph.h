@@ -90,6 +90,14 @@ void clear_graph(Graph *);
 void idle();
 /* Will idle here until user quits program. */
 
+int write_BMP_header(FILE *, int, int );
+
+int write_BMP_data(FILE *, Graph * );
+
+void write_BMP(Graph *, char *);
+
+
+
 void set_color(Graph *, int, int, int);
 /* Sets the color in the struct given in normal 24-bit RGB format */
 
