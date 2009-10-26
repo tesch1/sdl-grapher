@@ -18,6 +18,9 @@
 
 #include "sdlgraph.h"
 
+#define RGB(r, g, b) ((Uint8)r | (Uint8)g << 8 | (Uint8)b << 16)
+
+
 Uint32 * get_pixel_from_coordinates ( Graph * myGraph, float x, float y )
 {
   	Uint32 * pixel;
@@ -224,9 +227,7 @@ void delay ( int time )
 
 void clear_graph(Graph * myGraph)
 {
-	Uint32 color;
-	color = SDL_MapRGB(myGraph->workingSurface->format, 0x00, 0x00, 0x00);
-	SDL_FillRect(myGraph->workingSurface, NULL, color);
+	SDL_FillRect(myGraph->workingSurface, NULL, 0x00000000);
 }
 
 void idle()
@@ -346,7 +347,7 @@ void write_BMP(Graph * myGraph, char * name)
 
 void set_color(Graph * window, int r, int g, int b)
 {
-	window->color = SDL_MapRGB(window->workingSurface->format, r, g, b);
+	window->color = RGB(r, g, b);
 }
 		
 void quit()
