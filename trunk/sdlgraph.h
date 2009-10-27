@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define RGB(r, g, b) ((Uint8)r | (Uint8)g << 8 | (Uint8)b << 16)
+
 /* TODO: 
  * Better error handling
  */
@@ -74,6 +76,15 @@ void print_pixel ( Graph *, float, float );
 
 void print_pixel_by_window ( Graph *, int, int );
 /* Prints a pixel to the surface in the struct by using SDL window coordinates */
+
+void print_pixel_color ( Graph *, float, float, Uint32 );
+/* Identical to print_pixel(). However, this function allows for defining the
+ * color of the pixel to be printed directly without using set_color() first.
+ * It will not set the global color either. This might be useful when threading.
+ * A Uint32 color can be generated with the RGB macro. */
+
+void print_pixel_by_window_color ( Graph *, int, int, Uint32 );
+/* Same as print_pixel_by_window(). Allows for defining a color on the fly. */
 
 void update_screen(Graph *);
 /* Updates the screen. Performance tip: When printing many points to the screen, do not

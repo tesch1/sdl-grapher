@@ -18,8 +18,6 @@
 
 #include "sdlgraph.h"
 
-#define RGB(r, g, b) ((Uint8)r | (Uint8)g << 8 | (Uint8)b << 16)
-
 
 Uint32 * get_pixel_from_coordinates ( Graph * myGraph, float x, float y )
 {
@@ -200,6 +198,44 @@ void print_pixel ( Graph * myGraph, float x, float y )
 	
 }
 	
+void print_pixel_by_window_color ( Graph * myGraph, int x, int y, Uint32 color )
+{
+	Uint32 * pixel;
+	SDL_Event event;
+	if ( SDL_PollEvent ( &event ) )
+	{
+		if (event.type == SDL_QUIT)
+		{
+				quit();
+		}
+	}
+	
+	
+		pixel = get_pixel_from_window( myGraph, x, y );
+	
+		if( pixel != NULL )
+			*pixel = color;	
+	
+}
+
+void print_pixel_color ( Graph * myGraph, float x, float y, Uint32 color )
+{
+	Uint32 * pixel;
+	SDL_Event event;
+	if ( SDL_PollEvent ( &event ) )
+	{
+		if (event.type == SDL_QUIT)
+		{
+				quit();
+		}
+	}
+	
+		pixel = get_pixel_from_coordinates( myGraph, x, y );
+	
+		if( pixel != NULL )
+			*pixel = color;
+}
+
 void update_screen(Graph * myGraph)
 {
 	if (SDL_Flip(myGraph->workingSurface) != 0) quit();
@@ -246,7 +282,6 @@ void idle()
 			delay(1);
 	}
 }
-
 
 int write_BMP_header(FILE * file, int width, int height )
 {
