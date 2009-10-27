@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define RGB(r, g, b) ((Uint8)r | (Uint8)g << 8 | (Uint8)b << 16)
+#define RGB(r, g, b) ((Uint8)r << 16 | (Uint8)g << 8 | (Uint8)b)
 
 /* TODO: 
  * Better error handling
